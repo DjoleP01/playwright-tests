@@ -56,8 +56,8 @@ export async function registerUser(page, { name = USER_NAME, password = PASSWORD
   await page.locator('[data-qa="create-account"]').click({ force: true });
   await expect(page.getByText('ACCOUNT CREATED!')).toBeVisible();
 
-  await page.locator('[data-qa="continue-button"]').click({ force: true });
-  await page.waitForLoadState('networkidle');
+  await page.getByRole('link', { name: 'Continue' }).click();
+  await page.waitForURL('/', { timeout: 10000 });
 
   await expect(page.getByText(/Logged in as/)).toBeVisible();
 
@@ -68,5 +68,5 @@ export async function deleteAccount(page) {
   await page.getByRole('link', { name: 'Delete Account' }).click({ force: true });
   await page.waitForLoadState('networkidle');
   await expect(page.getByText('ACCOUNT DELETED!')).toBeVisible();
-  await page.locator('[data-qa="continue-button"]').click({ force: true });
+  await page.getByRole('link', { name: 'Continue' }).click();
 }

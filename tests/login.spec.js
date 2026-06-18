@@ -15,11 +15,19 @@ test.describe('Login', () => {
 
   test('TC4: Logout User', async ({ page }) => {
     await blockAds(page);
-    await registerUser(page);
+    const email = await registerUser(page);
 
     await page.getByRole('link', { name: 'Logout' }).click({ force: true });
     await page.waitForLoadState('networkidle');
     await expect(page.getByText('Login to your account')).toBeVisible();
+
+    await page.locator('[data-qa="login-email"]').fill(email);
+    await page.locator('[data-qa="login-password"]').fill(PASSWORD);
+    await page.locator('[data-qa="login-button"]').click({ force: true });
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText(/Logged in as/)).toBeVisible();
+
+    await deleteAccount(page);
   });
 
   test('TC2: Login User with correct email and password', async ({ page }) => {
