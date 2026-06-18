@@ -13,6 +13,15 @@ test.describe('Login', () => {
     await expect(page.getByText('Your email or password is incorrect!')).toBeVisible();
   });
 
+  test('TC4: Logout User', async ({ page }) => {
+    await blockAds(page);
+    await registerUser(page);
+
+    await page.getByRole('link', { name: 'Logout' }).click({ force: true });
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText('Login to your account')).toBeVisible();
+  });
+
   test('TC2: Login User with correct email and password', async ({ page }) => {
     await blockAds(page);
 
